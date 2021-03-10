@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/git-trending/static/css/main.8c8b27cf.chunk.css",
-    "main.js": "/git-trending/static/js/main.2a90f893.chunk.js",
-    "main.js.map": "/git-trending/static/js/main.2a90f893.chunk.js.map",
+    "main.js": "/git-trending/static/js/main.e802f07b.chunk.js",
+    "main.js.map": "/git-trending/static/js/main.e802f07b.chunk.js.map",
     "runtime-main.js": "/git-trending/static/js/runtime-main.d0195932.js",
     "runtime-main.js.map": "/git-trending/static/js/runtime-main.d0195932.js.map",
     "static/js/2.3218f87d.chunk.js": "/git-trending/static/js/2.3218f87d.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.d0195932.js",
     "static/js/2.3218f87d.chunk.js",
     "static/css/main.8c8b27cf.chunk.css",
-    "static/js/main.2a90f893.chunk.js"
+    "static/js/main.e802f07b.chunk.js"
   ]
 }
