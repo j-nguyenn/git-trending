@@ -26,7 +26,7 @@ const HomePage = () => {
     const fromDate = moment().add(-1, "w").format("YYYY-MM-DD");
     const result = await fetchRepositories(fromDate, page, lang, searchQuery);
     const { items, total_count } = result;
-    setTotalPages(Math.floor(total_count / 30));
+    setTotalPages(Math.min(Math.floor(total_count / 30), 10));
     setResults(items);
   };
 

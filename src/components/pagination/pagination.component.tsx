@@ -23,19 +23,7 @@ const Pagination = (props: PaginationProps) => {
     );
   };
   const renderPagination = () => {
-    if (totalPages <= 5) {
-      return <>{pageKeys.map(renderPageItem)}</>;
-    }
-    const leftPart = pageKeys.slice(0, 3);
-    const rightPart = pageKeys.slice(totalPages - 3, totalPages - 1);
-
-    return (
-      <>
-        {leftPart.map(renderPageItem)}
-        <div className="page-item">...</div>
-        {rightPart.map(renderPageItem)}
-      </>
-    );
+    return <>{pageKeys.map(renderPageItem)}</>;
   };
   return <div className={PaginationStyle()}>{renderPagination()}</div>;
 };

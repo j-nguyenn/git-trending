@@ -39,7 +39,9 @@ export const getTotalPages = (): number => {
 };
 
 export const setRepositories = (repositories: RepositoryCardProps[]): void => {
-  localStorage.setItem("repositories", JSON.stringify(repositories));
+  if (repositories) {
+    localStorage.setItem("repositories", JSON.stringify(repositories));
+  }
 };
 
 export const getRepositories = (): RepositoryCardProps[] => {
