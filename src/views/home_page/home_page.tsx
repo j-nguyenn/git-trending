@@ -1,11 +1,7 @@
 import { css } from "@emotion/css";
 import moment from "moment";
 import React from "react";
-import {
-  fetchRepositories,
-  getRepositories,
-  getTotalPages,
-} from "../../actions";
+import { fetchRepositories, getRepositories } from "../../actions";
 import FilterGroup from "../../components/filter_group/filter_group.component";
 import Pagination from "../../components/pagination/pagination.component";
 import { RepositoryCardProps } from "../../components/repository_card/repository_card.interface";
@@ -14,32 +10,33 @@ import SearchInput from "../../components/search_input/search_input.component";
 
 const HomePage = () => {
   const [repoResults, setResults] = React.useState<RepositoryCardProps[]>([]);
-  const [totalPages, setTotalPages] = React.useState(1);
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const [currentLang, setCurrentLang] = React.useState("");
+  const totalPages = React.useRef<number>(1);
+  const currentPage = React.useRef<number>(1);
+  const currentLang = React.useRef<string>("");
 
-  const fetchData = async (
-    page: number,
-    lang?: string,
-    searchQuery?: string
-  ) => {
-    const fromDate = moment().add(-1, "w").format("YYYY-MM-DD");
-    const result = await fetchRepositories(fromDate, page, lang, searchQuery);
-    const { items, total_count } = result;
-    setTotalPages(Math.min(Math.floor(total_count / 30), 10));
-    setResults(items);
-  };
+  const fetchData = React.useCallback(
+    async (page: number, lang?: string, searchQuery?: string) => {
+      console.log("fetchData");
+      const fromDate = moment().add(-1, "w").format("YYYY-MM-DD");
+      const result = await fetchRepositories(fromDate, page, lang, searchQuery);
+      const { items, total_count } = result;
+      totalPages.current = Math.min(Math.floor(total_count / 30), 10);
+      setResults(items);
+    },
+    [repoResults]
+  );
 
   React.useEffect(() => {
     const cachedResults = getRepositories();
     if (cachedResults?.length) {
       setResults(cachedResults);
-      setTotalPages(getTotalPages());
+      totalPages.current = 10;
     } else {
       fetchData(1);
     }
   }, []);
 
+  console.log("render", repoResults.length);
   return (
     <div className={homePageStyle()}>
       <div className="header">
@@ -47,28 +44,28 @@ const HomePage = () => {
       </div>
       <SearchInput
         onSearch={(value) => {
-          fetchData(currentPage, currentLang, value);
+          fetchData(currentPage.current, currentLang.current, value);
         }}
       />
       <FilterGroup
         onFilterLanguage={(lang) => {
-          setCurrentLang(lang);
-          fetchData(currentPage, lang);
+          currentLang.current = lang;
+          fetchData(currentPage.current, lang);
         }}
       />
       <RepositoryList items={repoResults} />
       <Pagination
-        totalPages={totalPages}
+        totalPages={totalPages.current}
         onPageChanged={(page) => {
-          setCurrentPage(page);
-          fetchData(page, currentLang);
+          currentPage.current = page;
+          fetchData(page, currentLang.current);
         }}
       />
     </div>
   );
 };
 
-export default HomePage;
+export default React.memo(HomePage);
 
 const homePageStyle = () => css`
   label: home-page;
