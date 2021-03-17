@@ -13,6 +13,11 @@ const SearchInput = (props: SearchInputProps) => {
             type="text"
             className="search-term"
             placeholder="Search ..."
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                props.onSearch(searchValue);
+              }
+            }}
             onChange={(e) => setSearchValue(e.target.value)}
           ></input>
           <button

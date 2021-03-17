@@ -1,5 +1,5 @@
 import { css } from "@emotion/css";
-import moment from "moment";
+import moment from "moment"; // date-fns
 import React from "react";
 import { fetchRepositories, getRepositories } from "../../actions";
 import FilterGroup from "../../components/filter_group/filter_group.component";
@@ -13,30 +13,41 @@ const HomePage = () => {
   const totalPages = React.useRef<number>(1);
   const currentPage = React.useRef<number>(1);
   const currentLang = React.useRef<string>("");
+  const didMount = React.useRef<boolean>(false);
 
   const fetchData = React.useCallback(
     async (page: number, lang?: string, searchQuery?: string) => {
-      console.log("fetchData");
       const fromDate = moment().add(-1, "w").format("YYYY-MM-DD");
       const result = await fetchRepositories(fromDate, page, lang, searchQuery);
-      const { items, total_count } = result;
-      totalPages.current = Math.min(Math.floor(total_count / 30), 10);
-      setResults(items);
+      try {
+        const { items, total_count } = result;
+        totalPages.current = Math.min(Math.floor(total_count / 30), 10);
+        setResults(items);
+      } catch {
+        console.warn("error");
+      }
     },
     [repoResults]
   );
 
   React.useEffect(() => {
+    totalPages.current = 10;
     const cachedResults = getRepositories();
     if (cachedResults?.length) {
       setResults(cachedResults);
-      totalPages.current = 10;
     } else {
       fetchData(1);
     }
+    didMount.current = true;
   }, []);
 
-  console.log("render", repoResults.length);
+  const renderMainResult = () => {
+    if (didMount.current && !repoResults?.length) {
+      return <div>Oops! No result found</div>;
+    } else {
+      return <RepositoryList items={repoResults} />;
+    }
+  };
   return (
     <div className={homePageStyle()}>
       <div className="header">
@@ -48,12 +59,19 @@ const HomePage = () => {
         }}
       />
       <FilterGroup
+        onFilterStaredRepo={() => {
+          const mostRecentResults = getRepositories();
+          const staredRepos = mostRecentResults.filter(
+            (result) => result.rated
+          );
+          setResults(staredRepos);
+        }}
         onFilterLanguage={(lang) => {
           currentLang.current = lang;
           fetchData(currentPage.current, lang);
         }}
       />
-      <RepositoryList items={repoResults} />
+      {renderMainResult()}
       <Pagination
         totalPages={totalPages.current}
         onPageChanged={(page) => {

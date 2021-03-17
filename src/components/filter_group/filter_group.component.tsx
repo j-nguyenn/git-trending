@@ -39,10 +39,19 @@ const FilterGroup = (props: FilterGroupProps) => {
 
   return (
     <div className={filterGroupStyle()}>
-      <div>
+      <div className="section">
         <small>Languages: </small>
+        {renderLanguageOptions()}
       </div>
-      {renderLanguageOptions()}
+      <div className="section end">
+        <button
+          className="star-button"
+          onClick={() => props.onFilterStaredRepo()}
+        >
+          <i className="fa fa-star"></i>
+          Stared repo
+        </button>
+      </div>
     </div>
   );
 };
@@ -53,6 +62,7 @@ const filterGroupStyle = () => css`
   label: filter-group;
   display: flex;
   padding-top: 12px;
+  flex-direction: column;
   .languages-list {
     padding-left: 4px;
     display: flex;
@@ -66,6 +76,21 @@ const filterGroupStyle = () => css`
     .selected {
       background: rgba(27, 31, 35, 0.08);
     }
+  }
+  .section {
+    padding-top: 5px;
+    display: flex;
+  }
+  .end {
+    justify-content: flex-end;
+  }
+  .star-button {
+    background: #388bfd;
+    text-align: center;
+    color: #fff;
+    cursor: pointer;
+    border: 0;
+    border-radius: 5px;
   }
 `;
 

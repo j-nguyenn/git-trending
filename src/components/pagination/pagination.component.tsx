@@ -3,10 +3,9 @@ import React from "react";
 import { PaginationProps } from "./pagination.interface";
 
 const Pagination = (props: PaginationProps) => {
-  const { totalPages } = props;
   const [currentPage, setCurrentPage] = React.useState(1);
 
-  const pageKeys = [...Array(totalPages).keys()].map((i) => i + 1);
+  const pageKeys = [...Array(10).keys()].map((i) => i + 1);
 
   const renderPageItem = (item: number) => {
     return (
