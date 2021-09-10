@@ -3,6 +3,7 @@ import { css } from "@emotion/css";
 import { FilterGroupProps } from "./filter_group.interface";
 
 const FilterGroup = (props: FilterGroupProps) => {
+  const { onClearCache, onShowAll, onFilterStaredRepo } = props;
   const [selectedLang, setSelectedLang] = React.useState<string>();
 
   const renderLanguageOptions = () => {
@@ -43,11 +44,15 @@ const FilterGroup = (props: FilterGroupProps) => {
         <small>Languages: </small>
         {renderLanguageOptions()}
       </div>
+
       <div className="section end">
-        <button
-          className="star-button"
-          onClick={() => props.onFilterStaredRepo()}
-        >
+        <button className="link-btn" onClick={onClearCache}>
+          Clear cache
+        </button>
+        <button className="styled-btn" onClick={onShowAll}>
+          Show all repo
+        </button>
+        <button className="styled-btn star-btn" onClick={onFilterStaredRepo}>
           <i className="fa fa-star"></i>
           Stared repo
         </button>
@@ -84,13 +89,31 @@ const filterGroupStyle = () => css`
   .end {
     justify-content: flex-end;
   }
-  .star-button {
+
+  .styled-btn {
+    border: 0;
+    border-radius: 4px;
+    padding: 4px 8px;
+    margin-right: 4px;
+    margin-left: 4px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .star-btn {
     background: #388bfd;
     text-align: center;
     color: #fff;
-    cursor: pointer;
+  }
+
+  .link-btn {
     border: 0;
-    border-radius: 5px;
+    background: transparent;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 `;
 

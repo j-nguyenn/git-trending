@@ -1,7 +1,7 @@
 import { css } from "@emotion/css";
 import moment from "moment";
 import React from "react";
-import { toggleStar } from "../../actions";
+import RepoContextProvider from "../context";
 import { RepositoryCardProps } from "./repository_card.interface";
 
 const RepositoryCard = (props: RepositoryCardProps) => {
@@ -13,21 +13,16 @@ const RepositoryCard = (props: RepositoryCardProps) => {
     full_name,
     language,
     updated_at,
-    rated,
   } = props;
-  const [star, setStar] = React.useState(rated ? 1 : 0);
 
-  const onStarClick = () => {
-    toggleStar(id);
-    setStar(star ? 0 : 1);
-  };
+  const { toggleStar } = React.useContext(RepoContextProvider);
 
   return (
     <div className={repositoryCardStyle()}>
       <div className="repo-left">
-        <div className="repo-star" onClick={onStarClick}>
-          <div className="repo-star-number">{stargazers_count + star}</div>
-          <span>{stargazers_count + star > 1 ? "stars" : "star"}</span>
+        <div className="repo-star" onClick={() => toggleStar(id)}>
+          <div className="repo-star-number">{stargazers_count}</div>
+          <span>{stargazers_count > 1 ? "stars" : "star"}</span>
         </div>
         <div className="repo-main">
           <a href={html_url}>{full_name}</a>
